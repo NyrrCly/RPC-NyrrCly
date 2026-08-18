@@ -492,8 +492,8 @@ class RPCClient extends EventEmitter {
     }
     if (
       args.largeImageKey || args.largeImageText
-      || args.smallImageKey || args.smallImageText || 
-      args.largeImageURL || args.smallImageURL
+      || args.smallImageKey || args.smallImageText
+      || args.largeImageURL || args.smallImageURL
     ) {
       assets = {
         large_image: args.largeImageKey,
