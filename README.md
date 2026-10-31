@@ -1,17 +1,15 @@
 <div align="center">
   <br />
   <p>
-    <a href="https://discord.gg/bRCvFy9"><img src="https://discordapp.com/api/guilds/222078108977594368/embed.png" alt="Discord server" /></a>
-    <a href="https://www.npmjs.com/package/discord-rpc"><img src="https://img.shields.io/npm/v/discord-rpc.svg?maxAge=3600" alt="NPM version" /></a>
-    <a href="https://www.npmjs.com/package/discord-rpc"><img src="https://img.shields.io/npm/dt/discord-rpc.svg?maxAge=3600" alt="NPM downloads" /></a>
-    <a href="https://david-dm.org/discordjs/RPC"><img src="https://img.shields.io/david/discordjs/RPC.svg?maxAge=3600" alt="Dependencies" /></a>
+    <a href="https://www.npmjs.com/package/rpc-nyrrcly"><img src="https://img.shields.io/npm/v/rpc-nyrrcly.svg?maxAge=3600" alt="NPM version" /></a>
+    <a href="https://www.npmjs.com/package/rpc-nyrrcly"><img src="https://img.shields.io/npm/dt/rpc-nyrrcly.svg?maxAge=3600" alt="NPM downloads" /></a>
   </p>
   <p>
-    <a href="https://nodei.co/npm/discord-rpc/"><img src="https://nodei.co/npm/discord-rpc.png?downloads=true&stars=true" alt="NPM info" /></a>
+    <a href="https://nodei.co/npm/rpc-nyrrcly/"><img src="https://nodei.co/npm/rpc-nyrrcly.png?downloads=true&stars=true" alt="NPM info" /></a>
   </p>
 </div>
 
-# Discord.js RPC Extension
+# Discord.js RPC Extension (FORK OF [DISCORD.JS RPC](https://github.com/discordjs/RPC))
 
 ### [Documentation](https://discord.js.org/#/docs/rpc/)
 

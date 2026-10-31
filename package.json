@@ -1,7 +1,7 @@
 {
   "name": "rpc-nyrrcly",
-  "version": "4.0.3",
-  "description": "A simple RPC client for Discord",
+  "version": "4.0.4",
+  "description": "RPC client for Discord (Fork of discord.js RPC)",
   "keywords": [
     "discord",
     "rpc",
@@ -13,13 +13,13 @@
   "unpkg": "browser.js",
   "author": "snek <me@gus.host>",
   "license": "MIT",
-  "homepage": "https://github.com/discordjs/RPC#readme",
+  "homepage": "https://github.com/NyrrCly/RPC-NyrrCly#readme",
   "bugs": {
-    "url": "https://github.com/discordjs/RPC/issues"
+    "url": "https://github.com/NyrrCly/RPC-NyrrCly/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/discordjs/RPC.git"
+    "url": "git+https://github.com/NyrrCly/RPC-NyrrCly.git"
   },
   "scripts": {
     "lint": "eslint src test --ext=js",
