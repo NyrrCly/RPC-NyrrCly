@@ -523,7 +523,9 @@ class RPCClient extends EventEmitter {
       activity: {
         type: args.type,
         state: args.state,
+        state_url: args.stateUrl,
         details: args.details,
+        details_url: args.detailsUrl,
         timestamps,
         assets,
         party,
