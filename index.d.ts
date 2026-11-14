@@ -452,7 +452,7 @@ export interface Presence {
     /**
      * What the player is doing (e.g., “Playing”, “Watching”, “Listening”)
      */
-    type?: string | undefined;
+    type?: number | undefined;
     /**
      * The user's current party status
      */
