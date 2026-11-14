@@ -12,6 +12,7 @@ module.exports = {
     es6: true,
     node: true,
   },
+  ignorePatterns: ['*.d.ts'],
   overrides: [
     {
       files: ['*.jsx'],
