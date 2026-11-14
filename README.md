@@ -11,6 +11,8 @@
 
 # Discord.js RPC Extension (FORK OF [DISCORD.JS RPC](https://github.com/discordjs/RPC))
 
+Features that aren't available in discord.js like type, largeImageUrl, smallImageUrl, stateUrl and detailsUrl
+
 ### [Documentation](https://discord.js.org/#/docs/rpc/)
 
 ### [Rich Presence Example](https://github.com/discordjs/RPC/blob/master/example)
