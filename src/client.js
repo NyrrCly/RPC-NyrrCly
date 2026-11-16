@@ -1,11 +1,9 @@
-'use strict';
-
-const EventEmitter = require('events');
-const { setTimeout, clearTimeout } = require('timers');
-const fetch = require('node-fetch');
-const transports = require('./transports');
-const { RPCCommands, RPCEvents, RelationshipTypes } = require('./constants');
-const { pid: getPid, uuid } = require('./util');
+import EventEmitter from 'node:events';
+import { clearTimeout, setTimeout } from 'node:timers';
+import fetch from 'node-fetch';
+import { RelationshipTypes, RPCCommands, RPCEvents } from './constants.js';
+import transports from './transports/index.js';
+import { pid as getPid, uuid } from './util.js';
 
 function subKey(event, args) {
   return `${event}${JSON.stringify(args)}`;
@@ -52,7 +50,9 @@ class RPCClient extends EventEmitter {
     }
 
     this.fetch = (method, path, { data, query } = {}) =>
-      fetch(`${this.fetch.endpoint}${path}${query ? new URLSearchParams(query) : ''}`, {
+      fetch(`${this.fetch.endpoint}${path}${query
+        ? new URLSearchParams(query)
+        : ''}`, {
         method,
         body: data,
         headers: {
@@ -73,7 +73,7 @@ class RPCClient extends EventEmitter {
     /**
      * Raw transport userd
      * @type {RPCTransport}
-     * @private
+     * @private1
      */
     this.transport = new Transport(this);
     this.transport.on('message', this._onRpcMessage.bind(this));
@@ -130,7 +130,7 @@ class RPCClient extends EventEmitter {
    * @param {RPCLoginOptions} options Options for authentication.
    * At least one property must be provided to perform login.
    * @example client.login({ clientId: '1234567', clientSecret: 'abcdef123' });
-   * @returns {Promise<RPCClient>}
+   * @returns {Promise<RPCClient>} The authenticated client instance.
    */
   async login(options = {}) {
     let { clientId, accessToken } = options;
@@ -148,9 +148,9 @@ class RPCClient extends EventEmitter {
   /**
    * Request
    * @param {string} cmd Command
-   * @param {Object} [args={}] Arguments
+   * @param {object} [args] Arguments
    * @param {string} [evt] Event
-   * @returns {Promise}
+   * @returns {Promise} A promise that resolves with the response data.
    * @private
    */
   request(cmd, args, evt) {
@@ -163,7 +163,7 @@ class RPCClient extends EventEmitter {
 
   /**
    * Message handler
-   * @param {Object} message message
+   * @param {object} message message
    * @private
    */
   _onRpcMessage(message) {
@@ -189,9 +189,13 @@ class RPCClient extends EventEmitter {
   }
 
   /**
-   * Authorize
-   * @param {Object} options options
-   * @returns {Promise}
+   * @param {object} [options] Authorize options
+   * @param {string[]} [options.scopes] OAuth2 scopes
+   * @param {string} [options.clientSecret] Client secret
+   * @param {boolean} [options.rpcToken] RPC token flag
+   * @param {string} [options.redirectUri] Redirect URI
+   * @param {string} [options.prompt] Prompt option
+   * @returns {Promise} A promise that resolves with the authorization acess token.
    * @private
    */
   async authorize({ scopes, clientSecret, rpcToken, redirectUri, prompt } = {}) {
@@ -228,10 +232,10 @@ class RPCClient extends EventEmitter {
   /**
    * Authenticate
    * @param {string} accessToken access token
-   * @returns {Promise}
+   * @returns {Promise} A promise that resolves with the authenticated client instance.
    * @private
    */
-  authenticate(accessToken) {
+  async authenticate(accessToken) {
     return this.request('AUTHENTICATE', { access_token: accessToken })
       .then(({ application, user }) => {
         this.accessToken = accessToken;
@@ -242,12 +246,11 @@ class RPCClient extends EventEmitter {
       });
   }
 
-
   /**
    * Fetch a guild
    * @param {Snowflake} id Guild ID
    * @param {number} [timeout] Timeout request
-   * @returns {Promise<Guild>}
+   * @returns {Promise<Guild>} A promise that resolves with the fetched guild.
    */
   getGuild(id, timeout) {
     return this.request(RPCCommands.GET_GUILD, { guild_id: id, timeout });
@@ -256,7 +259,7 @@ class RPCClient extends EventEmitter {
   /**
    * Fetch all guilds
    * @param {number} [timeout] Timeout request
-   * @returns {Promise<Collection<Snowflake, Guild>>}
+   * @returns {Promise<Collection<Snowflake, Guild>>} A promise that resolves with a collection of fetched guilds.
    */
   getGuilds(timeout) {
     return this.request(RPCCommands.GET_GUILDS, { timeout });
@@ -266,7 +269,7 @@ class RPCClient extends EventEmitter {
    * Get a channel
    * @param {Snowflake} id Channel ID
    * @param {number} [timeout] Timeout request
-   * @returns {Promise<Channel>}
+   * @returns {Promise<Channel>} A promise that resolves with the fetched channel.
    */
   getChannel(id, timeout) {
     return this.request(RPCCommands.GET_CHANNEL, { channel_id: id, timeout });
@@ -276,7 +279,7 @@ class RPCClient extends EventEmitter {
    * Get all channels
    * @param {Snowflake} [id] Guild ID
    * @param {number} [timeout] Timeout request
-   * @returns {Promise<Collection<Snowflake, Channel>>}
+   * @returns {Promise<Collection<Snowflake, Channel>>} A promise that resolves with a collection of fetched channels.
    */
   async getChannels(id, timeout) {
     const { channels } = await this.request(RPCCommands.GET_CHANNELS, {
@@ -306,11 +309,11 @@ class RPCClient extends EventEmitter {
   /**
    * Tell discord which devices are certified
    * @param {CertifiedDevice[]} devices Certified devices to send to discord
-   * @returns {Promise}
+   * @returns {Promise} A promise that resolves when the certified devices are set.
    */
   setCertifiedDevices(devices) {
     return this.request(RPCCommands.SET_CERTIFIED_DEVICES, {
-      devices: devices.map((d) => ({
+      devices: devices.map(d => ({
         type: d.type,
         id: d.uuid,
         vendor: d.vendor,
@@ -327,7 +330,7 @@ class RPCClient extends EventEmitter {
   /**
    * @typedef {UserVoiceSettings}
    * @prop {Snowflake} id ID of the user these settings apply to
-   * @prop {?Object} [pan] Pan settings, an object with `left` and `right` set between
+   * @prop {?object} [pan] Pan settings, an object with `left` and `right` set between
    * 0.0 and 1.0, inclusive
    * @prop {?number} [volume=100] The volume
    * @prop {bool} [mute] If the user is muted
@@ -337,7 +340,7 @@ class RPCClient extends EventEmitter {
    * Set the voice settings for a user, by id
    * @param {Snowflake} id ID of the user to set
    * @param {UserVoiceSettings} settings Settings
-   * @returns {Promise}
+   * @returns {Promise} A promise that resolves when the user voice settings are set.
    */
   setUserVoiceSettings(id, settings) {
     return this.request(RPCCommands.SET_USER_VOICE_SETTINGS, {
@@ -351,11 +354,11 @@ class RPCClient extends EventEmitter {
   /**
    * Move the user to a voice channel
    * @param {Snowflake} id ID of the voice channel
-   * @param {Object} [options] Options
+   * @param {object} [options] Options
    * @param {number} [options.timeout] Timeout for the command
    * @param {boolean} [options.force] Force this move. This should only be done if you
    * have explicit permission from the user.
-   * @returns {Promise}
+   * @returns {Promise} A promise that resolves with the selected channel.
    */
   selectVoiceChannel(id, { timeout, force = false } = {}) {
     return this.request(RPCCommands.SELECT_VOICE_CHANNEL, { channel_id: id, timeout, force });
@@ -364,10 +367,10 @@ class RPCClient extends EventEmitter {
   /**
    * Move the user to a text channel
    * @param {Snowflake} id ID of the voice channel
-   * @param {Object} [options] Options
+   * @param {object} [options] Options
    * @param {number} [options.timeout] Timeout for the command
    * have explicit permission from the user.
-   * @returns {Promise}
+   * @returns {Promise} A promise that resolves with the selected channel.
    */
   selectTextChannel(id, { timeout } = {}) {
     return this.request(RPCCommands.SELECT_TEXT_CHANNEL, { channel_id: id, timeout });
@@ -375,11 +378,11 @@ class RPCClient extends EventEmitter {
 
   /**
    * Get current voice settings
-   * @returns {Promise}
+   * @returns {Promise} A promise that resolves with the voice settings.
    */
-  getVoiceSettings() {
+  async getVoiceSettings() {
     return this.request(RPCCommands.GET_VOICE_SETTINGS)
-      .then((s) => ({
+      .then(s => ({
         automaticGainControl: s.automatic_gain_control,
         echoCancellation: s.echo_cancellation,
         noiseSuppression: s.noise_suppression,
@@ -410,8 +413,8 @@ class RPCClient extends EventEmitter {
   /**
    * Set current voice settings, overriding the current settings until this session disconnects.
    * This also locks the settings for any other rpc sessions which may be connected.
-   * @param {Object} args Settings
-   * @returns {Promise}
+   * @param {object} args Settings
+   * @returns {Promise} A promise that resolves when the voice settings are set.
    */
   setVoiceSettings(args) {
     return this.request(RPCCommands.SET_VOICE_SETTINGS, {
@@ -422,21 +425,27 @@ class RPCClient extends EventEmitter {
       silence_warning: args.silenceWarning,
       deaf: args.deaf,
       mute: args.mute,
-      input: args.input ? {
-        device_id: args.input.device,
-        volume: args.input.volume,
-      } : undefined,
-      output: args.output ? {
-        device_id: args.output.device,
-        volume: args.output.volume,
-      } : undefined,
-      mode: args.mode ? {
-        type: args.mode.type,
-        auto_threshold: args.mode.autoThreshold,
-        threshold: args.mode.threshold,
-        shortcut: args.mode.shortcut,
-        delay: args.mode.delay,
-      } : undefined,
+      input: args.input
+        ? {
+            device_id: args.input.device,
+            volume: args.input.volume,
+          }
+        : undefined,
+      output: args.output
+        ? {
+            device_id: args.output.device,
+            volume: args.output.volume,
+          }
+        : undefined,
+      mode: args.mode
+        ? {
+            type: args.mode.type,
+            auto_threshold: args.mode.autoThreshold,
+            threshold: args.mode.threshold,
+            shortcut: args.mode.shortcut,
+            delay: args.mode.delay,
+          }
+        : undefined,
     });
   }
 
@@ -446,9 +455,9 @@ class RPCClient extends EventEmitter {
    * This `stop` function must be called before disconnecting or else the user will have
    * to restart their client.
    * @param {Function} callback Callback handling keys
-   * @returns {Promise<Function>}
+   * @returns {Promise<Function>} A promise that resolves with a function to stop capturing.
    */
-  captureShortcut(callback) {
+  async captureShortcut(callback) {
     const subid = subKey(RPCEvents.CAPTURE_SHORTCUT_CHANGE);
     const stop = () => {
       this._subscriptions.delete(subid);
@@ -465,7 +474,7 @@ class RPCClient extends EventEmitter {
    * Sets the presence for the logged in user.
    * @param {object} args The rich presence to pass.
    * @param {number} [pid] The application's process ID. Defaults to the executing process' PID.
-   * @returns {Promise}
+   * @returns {Promise} A promise that resolves with the set activity.
    */
   setActivity(args = {}, pid = getPid()) {
     let timestamps;
@@ -540,7 +549,7 @@ class RPCClient extends EventEmitter {
    * Clears the currently set presence, if any. This will hide the "Playing X" message
    * displayed below the user's name.
    * @param {number} [pid] The application's process ID. Defaults to the executing process' PID.
-   * @returns {Promise}
+   * @returns {Promise} A promise that resolves when the activity is cleared.
    */
   clearActivity(pid = getPid()) {
     return this.request(RPCCommands.SET_ACTIVITY, {
@@ -551,7 +560,7 @@ class RPCClient extends EventEmitter {
   /**
    * Invite a user to join the game the RPC user is currently playing
    * @param {User} user The user to invite
-   * @returns {Promise}
+   * @returns {Promise} A promise that resolves when the join invite is sent.
    */
   sendJoinInvite(user) {
     return this.request(RPCCommands.SEND_ACTIVITY_JOIN_INVITE, {
@@ -562,7 +571,7 @@ class RPCClient extends EventEmitter {
   /**
    * Request to join the game the user is playing
    * @param {User} user The user whose game you want to request to join
-   * @returns {Promise}
+   * @returns {Promise} A promise that resolves when the join request is sent.
    */
   sendJoinRequest(user) {
     return this.request(RPCCommands.SEND_ACTIVITY_JOIN_REQUEST, {
@@ -573,7 +582,7 @@ class RPCClient extends EventEmitter {
   /**
    * Reject a join request from a user
    * @param {User} user The user whose request you wish to reject
-   * @returns {Promise}
+   * @returns {Promise} A promise that resolves when the join request is closed.
    */
   closeJoinRequest(user) {
     return this.request(RPCCommands.CLOSE_ACTIVITY_JOIN_REQUEST, {
@@ -636,7 +645,7 @@ class RPCClient extends EventEmitter {
   getRelationships() {
     const types = Object.keys(RelationshipTypes);
     return this.request(RPCCommands.GET_RELATIONSHIPS)
-      .then((o) => o.relationships.map((r) => ({
+      .then(o => o.relationships.map(r => ({
         ...r,
         type: types[r.type],
       })));
@@ -645,8 +654,8 @@ class RPCClient extends EventEmitter {
   /**
    * Subscribe to an event
    * @param {string} event Name of event e.g. `MESSAGE_CREATE`
-   * @param {Object} [args] Args for event e.g. `{ channel_id: '1234' }`
-   * @returns {Promise<Object>}
+   * @param {object} [args] Args for event e.g. `{ channel_id: '1234' }`
+   * @returns {Promise<object>} A promise that resolves with an object containing an unsubscribe function.
    */
   async subscribe(event, args) {
     await this.request(RPCCommands.SUBSCRIBE, args, event);
@@ -663,4 +672,4 @@ class RPCClient extends EventEmitter {
   }
 }
 
-module.exports = RPCClient;
+export default RPCClient;

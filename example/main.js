@@ -1,11 +1,7 @@
-'use strict';
-
-/* eslint-disable no-console */
-
-const { app, BrowserWindow } = require('electron');
-const path = require('path');
-const url = require('url');
-const DiscordRPC = require('../');
+import { join } from 'node:path';
+import { format } from 'node:url';
+import { app, BrowserWindow } from 'electron';
+import { Client, register } from '../src/index.js';
 
 let mainWindow;
 
@@ -20,8 +16,8 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
+  mainWindow.loadURL(format({
+    pathname: join(import.meta.dirname, 'index.html'),
     protocol: 'file:',
     slashes: true,
   }));
@@ -47,9 +43,9 @@ app.on('activate', () => {
 const clientId = '280984871685062656';
 
 // Only needed if you want to use spectate, join, or ask to join
-DiscordRPC.register(clientId);
+register(clientId);
 
-const rpc = new DiscordRPC.Client({ transport: 'ipc' });
+const rpc = new Client({ transport: 'ipc' });
 const startTimestamp = new Date();
 
 async function setActivity() {

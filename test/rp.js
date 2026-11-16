@@ -1,12 +1,6 @@
-'use strict';
-
 /* eslint-disable no-console */
-
-try {
-  require('wtfnode').init();
-} catch (err) {} // eslint-disable-line no-empty
-
-const { Client } = require('../');
+import { Client } from '../index.js';
+import auth from './auth.js';
 
 const client = new Client({
   transport: 'ipc',
@@ -24,4 +18,4 @@ client.on('ready', async () => {
   client.subscribe('VOICE_CHANNEL_SELECT');
 });
 
-client.login(require('./auth')).catch(console.error);
+client.login(auth).catch(console.error);

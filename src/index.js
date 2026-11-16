@@ -1,10 +1,11 @@
-'use strict';
+import Client from './client.js';
+import { registerProtocol } from './util.js';
 
-const util = require('./util');
+function register(id) {
+  return registerProtocol(`discord-${id}`);
+}
 
-module.exports = {
-  Client: require('./client'),
-  register(id) {
-    return util.register(`discord-${id}`);
-  },
+export {
+  Client,
+  register,
 };

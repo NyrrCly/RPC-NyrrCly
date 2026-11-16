@@ -1,13 +1,11 @@
-'use strict';
+import EventEmitter from 'node:events';
+import ws from 'ws';
+import { browser } from '../constants.js';
 
-const EventEmitter = require('events');
-const { browser } = require('../constants');
+const WebSocket = browser ? window.WebSocket : ws;
 
-// eslint-disable-next-line
-const WebSocket = browser ? window.WebSocket : require('ws');
-
-const pack = (d) => JSON.stringify(d);
-const unpack = (s) => JSON.parse(s);
+const pack = d => JSON.stringify(d);
+const unpack = s => JSON.parse(s);
 
 class WebSocketTransport extends EventEmitter {
   constructor(client) {
@@ -23,7 +21,9 @@ class WebSocketTransport extends EventEmitter {
 
     this.ws = new WebSocket(
       `ws://127.0.0.1:${port}/?v=1&client_id=${this.client.clientId}`,
-      browser ? undefined : { origin: this.client.options.origin },
+      browser
+        ? undefined
+        : { origin: this.client.options.origin },
     );
     this.ws.onopen = this.onOpen.bind(this);
     this.ws.onclose = this.onClose.bind(this);
@@ -45,7 +45,7 @@ class WebSocketTransport extends EventEmitter {
   onError(event) {
     try {
       this.ws.close();
-    } catch {} // eslint-disable-line no-empty
+    } catch {}
 
     if (this.tries > 20) {
       this.emit('error', event.error);
@@ -64,7 +64,7 @@ class WebSocketTransport extends EventEmitter {
     this.ws.send(pack(data));
   }
 
-  ping() {} // eslint-disable-line no-empty-function
+  ping() {}
 
   close() {
     return new Promise((r) => {
@@ -74,4 +74,4 @@ class WebSocketTransport extends EventEmitter {
   }
 }
 
-module.exports = WebSocketTransport;
+export default WebSocketTransport;
