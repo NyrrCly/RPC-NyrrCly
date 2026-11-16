@@ -1,5 +1,3 @@
-'use strict';
-
 function keyMirror(arr) {
   const tmp = {};
   for (const value of arr) {
@@ -8,10 +6,9 @@ function keyMirror(arr) {
   return tmp;
 }
 
+export const browser = typeof window !== 'undefined';
 
-exports.browser = typeof window !== 'undefined';
-
-exports.RPCCommands = keyMirror([
+export const RPCCommands = keyMirror([
   'DISPATCH',
   'AUTHORIZE',
   'AUTHENTICATE',
@@ -76,7 +73,7 @@ exports.RPCCommands = keyMirror([
   'GET_USER_ACHIEVEMENTS',
 ]);
 
-exports.RPCEvents = keyMirror([
+export const RPCEvents = keyMirror([
   'CURRENT_USER_UPDATE',
   'GUILD_STATUS',
   'GUILD_CREATE',
@@ -117,7 +114,7 @@ exports.RPCEvents = keyMirror([
   'ERROR',
 ]);
 
-exports.RPCErrors = {
+export const RPCErrors = {
   CAPTURE_SHORTCUT_ALREADY_LISTENING: 5004,
   GET_GUILD_TIMED_OUT: 5002,
   INVALID_ACTIVITY_JOIN_REQUEST: 4012,
@@ -151,7 +148,7 @@ exports.RPCErrors = {
   UNKNOWN_ERROR: 1000,
 };
 
-exports.RPCCloseCodes = {
+export const RPCCloseCodes = {
   CLOSE_NORMAL: 1000,
   CLOSE_UNSUPPORTED: 1003,
   CLOSE_ABNORMAL: 1006,
@@ -163,12 +160,12 @@ exports.RPCCloseCodes = {
   INVALID_ENCODING: 4005,
 };
 
-exports.LobbyTypes = {
+export const LobbyTypes = {
   PRIVATE: 1,
   PUBLIC: 2,
 };
 
-exports.RelationshipTypes = {
+export const RelationshipTypes = {
   NONE: 0,
   FRIEND: 1,
   BLOCKED: 2,

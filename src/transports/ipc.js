@@ -1,9 +1,9 @@
-'use strict';
-
-const net = require('net');
-const EventEmitter = require('events');
-const fetch = require('node-fetch');
-const { uuid } = require('../util');
+import { Buffer } from 'node:buffer';
+import EventEmitter from 'node:events';
+import { createConnection } from 'node:net';
+import process from 'node:process';
+import fetch from 'node-fetch';
+import { uuid } from '../util.js';
 
 const OPCodes = {
   HANDSHAKE: 0,
@@ -32,7 +32,7 @@ function getIPC(id = 0) {
         reject(new Error('Could not connect'));
       }
     };
-    const sock = net.createConnection(path, () => {
+    const sock = createConnection(path, () => {
       sock.removeListener('error', onerror);
       resolve(sock);
     });
@@ -51,7 +51,7 @@ async function findEndpoint(tries = 0) {
       return endpoint;
     }
     return findEndpoint(tries + 1);
-  } catch (e) {
+  } catch {
     return findEndpoint(tries + 1);
   }
 }
@@ -89,10 +89,10 @@ function decode(socket, callback) {
 
   try {
     const data = JSON.parse(working.full + raw);
-    callback({ op, data }); // eslint-disable-line callback-return
+    callback({ op, data });
     working.full = '';
     working.op = undefined;
-  } catch (err) {
+  } catch {
     working.full += raw;
   }
 
@@ -168,6 +168,5 @@ class IPCTransport extends EventEmitter {
   }
 }
 
-module.exports = IPCTransport;
-module.exports.encode = encode;
-module.exports.decode = decode;
+export default IPCTransport;
+export { decode, encode };

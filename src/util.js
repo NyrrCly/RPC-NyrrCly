@@ -1,18 +1,13 @@
-'use strict';
+import process from 'node:process';
+import { app } from 'electron';
 
-let register;
-try {
-  const { app } = require('electron');
-  register = app.setAsDefaultProtocolClient.bind(app);
-} catch (err) {
+function registerProtocol(protocol) {
   try {
-    register = require('register-scheme');
-  } catch (e) {} // eslint-disable-line no-empty
-}
-
-if (typeof register !== 'function') {
-  register = () => false;
-}
+    return app.setAsDefaultProtocolClient(protocol);
+  } catch {
+    return false;
+  }
+};
 
 function pid() {
   if (typeof process !== 'undefined') {
@@ -21,7 +16,7 @@ function pid() {
   return null;
 }
 
-const uuid4122 = () => {
+function uuid4122() {
   let uuid = '';
   for (let i = 0; i < 32; i += 1) {
     if (i === 8 || i === 12 || i === 16 || i === 20) {
@@ -31,7 +26,7 @@ const uuid4122 = () => {
     if (i === 12) {
       n = 4;
     } else {
-      const random = Math.random() * 16 | 0;
+      const random = (Math.random() * 16) | 0;
       if (i === 16) {
         n = (random & 3) | 0;
       } else {
@@ -43,8 +38,8 @@ const uuid4122 = () => {
   return uuid;
 };
 
-module.exports = {
+export {
   pid,
-  register,
-  uuid: uuid4122,
+  registerProtocol,
+  uuid4122 as uuid,
 };

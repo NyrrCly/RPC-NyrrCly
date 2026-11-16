@@ -9,15 +9,16 @@
   </p>
 </div>
 
-# Discord.js RPC Extension (FORK OF [DISCORD.JS RPC](https://github.com/discordjs/RPC))
+# RPC Extension (Fork of [Discord.js RPC](https://github.com/discordjs/RPC))
 
-Features that aren't available in discord.js like type, largeImageUrl, smallImageUrl, stateUrl and detailsUrl
+Rewritten from CommonJS to native ES Modules.
+Includes extra features not available in original Discord.js RPC, such as `type`, `largeImageUrl`, `smallImageUrl`, `stateUrl`, and `detailsUrl`.
 
-### [Documentation](https://discord.js.org/#/docs/rpc/)
+## [Documentation](https://discord.js.org/#/docs/rpc/)
 
-### [Rich Presence Example](https://github.com/discordjs/RPC/blob/master/example)
+## [Rich Presence Example](https://github.com/NyrrCly/RPC-NyrrCly/tree/master/example)
 
-### __Browser__ Example
+## __Browser__ Example
 
 ```javascript
 const clientId = '287406016902594560';

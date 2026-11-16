@@ -1,6 +1,7 @@
-'use strict';
+import ipc from './ipc.js';
+import websocket from './websocket.js';
 
-module.exports = {
-  ipc: require('./ipc'),
-  websocket: require('./websocket'),
+export default {
+  ipc,
+  websocket,
 };
