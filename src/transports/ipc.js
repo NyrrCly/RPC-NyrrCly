@@ -66,9 +66,10 @@ function encode(op, data) {
   return packet;
 }
 
-const working = {
-  full: '',
+const accumulatedData = {
+  payload: Buffer.alloc(0),
   op: undefined,
+  expectedLength: 0,
 };
 
 function decode(socket, callback) {
@@ -77,23 +78,41 @@ function decode(socket, callback) {
     return;
   }
 
-  let { op } = working;
-  let raw;
-  if (working.full === '') {
-    op = working.op = packet.readInt32LE(0);
-    const len = packet.readInt32LE(4);
-    raw = packet.slice(8, len + 8);
-  } else {
-    raw = packet.toString();
-  }
+  accumulatedData.payload = Buffer.concat([accumulatedData.payload, packet]);
 
-  try {
-    const data = JSON.parse(working.full + raw);
-    callback({ op, data });
-    working.full = '';
-    working.op = undefined;
-  } catch {
-    working.full += raw;
+  while (accumulatedData.payload.length > 0) {
+    if (accumulatedData.expectedLength === 0) {
+      accumulatedData.op = accumulatedData.payload.readInt32LE(0);
+      accumulatedData.expectedLength = accumulatedData.payload.readInt32LE(4);
+      accumulatedData.payload = accumulatedData.payload.subarray(8);
+    }
+
+    if (accumulatedData.payload.length < accumulatedData.expectedLength) {
+      break;
+    }
+
+    const currentPayload = accumulatedData.payload.subarray(0, accumulatedData.expectedLength);
+    const nextPayload = accumulatedData.payload.subarray(accumulatedData.expectedLength);
+
+    accumulatedData.payload = nextPayload;
+
+    try {
+      callback({
+        op: accumulatedData.op,
+        data: JSON.parse(currentPayload.toString('utf8')),
+      });
+
+      accumulatedData.op = undefined;
+      accumulatedData.expectedLength = 0;
+    } catch (err) {
+      callback({
+        error: new Error('Received payload with malformed JSON', { cause: err }),
+      });
+      accumulatedData.op = undefined;
+      accumulatedData.expectedLength = 0;
+
+      break;
+    }
   }
 
   decode(socket, callback);

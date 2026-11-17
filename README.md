@@ -1,11 +1,11 @@
 <div align="center">
   <br />
   <p>
-    <a href="https://www.npmjs.com/package/rpc-nyrrcly"><img src="https://img.shields.io/npm/v/rpc-nyrrcly.svg?maxAge=3600" alt="NPM version" /></a>
-    <a href="https://www.npmjs.com/package/rpc-nyrrcly"><img src="https://img.shields.io/npm/dt/rpc-nyrrcly.svg?maxAge=3600" alt="NPM downloads" /></a>
+    <a href="https://www.npmjs.com/package/@nyrrcly/discord-rpc"><img src="https://img.shields.io/npm/v/@nyrrcly/discord-rpc.svg?maxAge=3600" alt="NPM version" /></a>
+    <a href="https://www.npmjs.com/package/@nyrrcly/discord-rpc"><img src="https://img.shields.io/npm/dt/@nyrrcly/discord-rpc.svg?maxAge=3600" alt="NPM downloads" /></a>
   </p>
   <p>
-    <a href="https://nodei.co/npm/rpc-nyrrcly/"><img src="https://nodei.co/npm/rpc-nyrrcly.png?downloads=true&stars=true" alt="NPM info" /></a>
+    <a href="https://nodei.co/npm/@nyrrcly/discord-rpc/"><img src="https://nodei.co/npm/@nyrrcly/discord-rpc.png?downloads=true&stars=true" alt="NPM info" /></a>
   </p>
 </div>
 
@@ -16,7 +16,7 @@ Includes extra features not available in original Discord.js RPC, such as `type`
 
 ## [Documentation](https://discord.js.org/#/docs/rpc/)
 
-## [Rich Presence Example](https://github.com/NyrrCly/RPC-NyrrCly/tree/master/example)
+## [Rich Presence Example](https://github.com/NyrrCly/discord-rpc/tree/master/example)
 
 ## __Browser__ Example
 

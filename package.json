@@ -1,17 +1,17 @@
 {
-  "name": "rpc-nyrrcly",
+  "name": "@nyrrcly/discord-rpc",
   "type": "module",
-  "version": "4.0.7",
+  "version": "4.0.8",
   "description": "RPC client for Discord (Fork of discord.js RPC)",
   "author": "snek <me@gus.host>",
   "license": "MIT",
-  "homepage": "https://github.com/NyrrCly/RPC-NyrrCly#readme",
+  "homepage": "https://github.com/NyrrCly/discord-rpc#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NyrrCly/RPC-NyrrCly.git"
+    "url": "git+https://github.com/NyrrCly/discord-rpc.git"
   },
   "bugs": {
-    "url": "https://github.com/NyrrCly/RPC-NyrrCly/issues"
+    "url": "https://github.com/NyrrCly/discord-rpc/issues"
   },
   "keywords": [
     "discord",
