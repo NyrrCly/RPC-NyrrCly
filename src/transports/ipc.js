@@ -136,7 +136,11 @@ class IPCTransport extends EventEmitter {
     }));
     socket.pause();
     socket.on('readable', () => {
-      decode(socket, ({ op, data }) => {
+      decode(socket, ({ error, op, data }) => {
+        if (error) {
+          this.client.emit('error', error);
+          return;
+        }
         switch (op) {
           case OPCodes.PING:
             this.send(data, OPCodes.PONG);
